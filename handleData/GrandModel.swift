@@ -12,7 +12,6 @@ class GrandModel:NSObject,NSCoding {
     override init() {
         
     }
-    
     required init?(coder aDecoder: NSCoder) {
         super.init()
         let properties = getSelfProperty()
@@ -25,29 +24,21 @@ class GrandModel:NSObject,NSCoding {
         let properties = getSelfProperty()
         for propertyName in properties{
             let value = self.value(forKey: propertyName)
-            print("归档的数值\(value!),归档的key:\(propertyName)")
             aCoder.encode(value, forKey: propertyName)
         }
     }
     //这里不能用静态方法，因为父类没法获取运行时的子类，只能获取运行时子类的实例
-    
     func getSelfProperty()->[String]{
         var selfProperties = [String]()
-        let cls = self.classForCoder.class()
-//        (object_getClassName(self)
-//        c
-        print("这个类是\(cls)")
+        let cls = self.classForCoder
         var ivarsCnt : UInt32 = 0
         //　获取类成员变量列表，ivarsCnt为类成员数量
         let ivars = class_copyIvarList(cls, &ivarsCnt);
         for p in 0..<ivarsCnt {
             let ivar = ivars?[Int(p)]
             let n = String.init(cString: ivar_getName(ivar), encoding: String.Encoding.utf8)
-            print(n!)
             selfProperties.append(n!)
-//            selfProperties.append(n)
         }
-        print("总共有\(selfProperties.count)个属性")
         return selfProperties
     }
 }
